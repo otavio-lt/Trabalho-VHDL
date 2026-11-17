@@ -1,0 +1,30 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity bcd_converter is
+    port (
+        S   : in  std_logic_vector(4 downto 0);
+        Dez : out std_logic_vector(3 downto 0);
+        Uni : out std_logic_vector(3 downto 0);
+        Sig : out std_logic
+    );
+end bcd_converter;
+
+architecture arch_bcd_converter of bcd_converter is
+    signal V_temp : unsigned(4 downto 0);
+    signal U_temp : unsigned(4 downto 0);
+begin
+    Sig <= S(4);
+
+    V_temp <= unsigned(S) when S(4) = '0' else
+              unsigned(not S) + 1;
+				  
+    Dez <= "0001" when V_temp >= 10 else
+           "0000";
+
+    U_temp <= (V_temp - 10) when V_temp >= 10 else
+              V_temp;
+
+    Uni <= std_logic_vector(U_temp(3 downto 0));
+end arch_bcd_converter;
